@@ -313,8 +313,8 @@ class StrictRedisCluster(StrictRedis):
 
         key = args[1]
 
-        # OBJEECT command uses a special keyword as first positional argument
-        if command = 'OBJECT':
+        # OBJECT command uses a special keyword as first positional argument
+        if command == 'OBJECT':
             key = args[2]
 
         return self.connection_pool.nodes.keyslot(key)
@@ -783,8 +783,8 @@ class StrictRedisCluster(StrictRedis):
         # Optimization where if both keys is in the same slot then we can use the
         # plain upstream rename method.
         #
-        src_slot = self.connection_pool.keyslot(src)
-        dst_slot = self.connection_pool.keyslot(dst)
+        src_slot = self.connection_pool.nodes.keyslot(src)
+        dst_slot = self.connection_pool.nodes.keyslot(dst)
 
         if src_slot == dst_slot:
             return self.execute_command('RENAME', src, dst)
